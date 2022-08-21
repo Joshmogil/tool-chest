@@ -1,0 +1,1 @@
+kubectl delete $(kubectl get deployments,svc | grep -E 'deployment|service' | sed 's/ .*//')
