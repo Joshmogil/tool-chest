@@ -1,12 +1,8 @@
 #!/bin/bash
 
-docker pull quay.io/goswagger/swagger
+#https://goswagger.io/install.html
 
-if grep -Fxq "alias swagger" ~/.bashrc
-then
-    echo "swagger alias already set up"
-else
-    echo 'alias swagger="docker run --rm -it  --user $(id -u):$(id -g) -e GOPATH=$(go env GOPATH):/go -v $HOME:$HOME -w $(pwd) quay.io/goswagger/swagger"' >> ~/.bashrc
-fi
-alias swagger='docker run --rm -it  --user $(id -u):$(id -g) -e GOPATH=$(go env GOPATH):/go -v $HOME:$HOME -w $(pwd) quay.io/goswagger/swagger'
-swagger version
+download_url=$(curl -s https://api.github.com/repos/go-swagger/go-swagger/releases/latest | \
+  jq -r '.assets[] | select(.name | contains("'"$(uname | tr '[:upper:]' '[:lower:]')"'_amd64")) | .browser_download_url')
+curl -o /usr/local/bin/swagger -L'#' "$download_url"
+chmod +x /usr/local/bin/swagger
